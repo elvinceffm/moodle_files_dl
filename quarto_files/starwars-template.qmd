@@ -1,0 +1,95 @@
+---
+title: "Visualizing Starwars characters"
+output: html_document
+---
+
+
+We want to work with the `starwars` dataset, which is part of the `dplyr` package. Since we also need `ggplot2`, we load the `tidyverse`.
+
+```{r}
+#| label: load-packages
+library(tidyverse)
+```
+
+
+-----------------
+
+
+### Tasks
+
+
+__Task 1__
+
+
+```{r}
+#| label: task-1
+ggplot(starwars, 
+       aes(x = height, y = mass, size = birth_year)) +
+  geom_point(color = "#30509C")
+
+```
+
+
+__Task 2__
+
+
+
+```{r} 
+#| label: task-2
+ggplot(starwars, 
+       aes(x = height, y = mass,  size = birth_year)) +
+  geom_point(color = "#30509C") +
+  labs(
+    #title = "___",
+    #x = "___", 
+    #y = "___",
+    #___
+    )
+```
+
+
+
+__Task 3__
+
+
+
+```{r}
+#| label: task-3
+# add code here
+# pay attention to correctness and code style
+
+```
+
+
+__Task 4__
+
+
+```{r}
+#| label: task-4
+# add code here
+# pay attention to correctness and code style
+
+```
+
+
+
+__Task 5__
+
+
+
+```{r}
+#| label: task-5
+# add code here
+# pay attention to correctness and code style
+
+```
+
+__Task 6__
+
+
+```{r}
+#| label: task-6
+# add code here
+# pay attention to correctness and code style
+
+```

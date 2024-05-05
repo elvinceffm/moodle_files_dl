@@ -1,0 +1,204 @@
+---
+title: "HW problem - Nobel laureates"
+author: "undefined"
+output: html_document
+---
+
+
+In January 2017, BuzzFeed published an article on why Nobel laureates show immigration is so essential for American science. The article shows that while most Nobel laureates in the sciences are based in the US, many of them were born in other countries. This is one reason scientific leaders say immigration is vital for progress.
+
+Before you start solving the problem, you should read the BuzzFeed article titled [*These Nobel Prize Winners Show Why Immigration Is So Important For American Science*](https://www.BuzzFeednews.com/article/peteraldhous/immigration-and-science). 
+
+
+### Warm up
+
+Before we introduce the data, let's warm up with a simple exercises.
+
+> Update the YAML, changing the author name to your name.
+
+
+### Packages
+
+We'll use the **tidyverse** package in this homework problem.
+Therefore,  let's load this collection of packages by the following command:
+
+```{r load-packages, message = FALSE}
+library(tidyverse)
+```
+
+### Data
+
+The dataset for this assignment can be found as a CSV (_comma separated values_) file in the Moodle folder "Data files, Quarto files and Solutions to previous problem sets". 
+Create a subfolder with the name' data' in the folder where you have saved this file (`nobel_laureates.qmd`) and save the CSV file `nobel.csv` to this subfolder. Then, use the following command to read (using the `read_csv()` function from the `readr` package) in the data.
+
+
+```{r}
+#| label: load-data
+#| message: false
+nobel <- read_csv("data/nobel.csv")
+```
+
+The variable descriptions are as follows:
+
+-   `id`: ID number
+-   `firstname`: First name of laureate
+-   `surname`: Surname
+-   `year`: Year prize won
+-   `category`: Category of prize
+-   `affiliation`: Affiliation of laureate
+-   `city`: City of laureate in prize year
+-   `country`: Country of laureate in prize year
+-   `born_date`: Birth date of laureate
+-   `died_date`: Death date of laureate
+-   `gender`: Gender of laureate
+-   `born_city`: City where laureate was born
+-   `born_country`: Country where laureate was born
+-   `born_country_code`: Code of country where laureate was born
+-   `died_city`: City where laureate died
+-   `died_country`: Country where laureate died
+-   `died_country_code`: Code of country where laureate died
+-   `overall_motivation`: Overall motivation for recognition
+-   `share`: Number of other winners award is shared with
+-   `motivation`: Motivation for recognition
+
+In a few cases, the name of the city/country changed after the laureate was given (e.g., in 1975, Bosnia and Herzegovina was called the Socialist Federative Republic of Yugoslavia).
+In these cases the variables below reflect a different name than their counterparts without the suffix \`\_original\`.
+
+-   `born_country_original`: Original country where the laureate was born.
+-   `born_city_original`: Original city where the laureate was born.
+-   `died_country_original`: Original country where the laureate died.
+-   `died_city_original`: Original city where the laureate died.
+-   `city_original`: The original city where the laureate lived at the time of winning the award.
+-   `country_original`: Original country where the laureate lived at the time of winning the award.
+
+
+-----------------------------------------------
+
+
+## Exercises:
+
+
+
+1. How many observations and how many variables are in the dataset? What does each row represent?
+
+
+
+
+2.  There are some observations in this dataset that we will exclude from our analysis to match the BuzzFeed results. Edit the below code chunk to create a new data frame called `nobel_living` that filters for
+
+    -   laureates for whom `country` is available, 
+    -   laureates who are people as opposed to organizations (organizations are denoted with `"org"` as their `gender`), 
+    -   laureates who are still alive (their `died_date` is `NA`).     
+
+Confirm that once you have filtered for these characteristics, you have a data frame with 228 observations.
+
+
+```{r}
+#| label: living
+#| eval: false
+nobel_living <- nobel |>
+  filter(
+    !is.na(country),
+    gender __ "org",
+    ___(died_date)
+  )
+
+
+
+```
+
+*Hint: you can use `nrow()`  to determine the number of rows.*
+
+> Don't forget to remove the chunk option `eval: false`. Otherwise, the code will not be evaluated. 
+
+
+------
+
+------
+
+According to the BuzzFeed article, most Nobel laureates were based in the US when they won their prizes. Let's see if that's true.
+
+First, we'll create a new variable to identify whether the laureate was in the US when they won their prize.
+We'll use the `mutate()` function for this. The following pipeline mutates the `nobel_living` data frame by adding a new variable called `country_us`.
+We use an if statement to create this variable.
+The first argument in the `if_else()` function we're using to write this if statement is the condition we're testing for.
+If `country` is equal to `"USA"`, we set `country_us` to `"USA"`.
+If not, we set the `country_us` to `"Other"`.
+
+
+```{r}
+#| label: living-us
+#| eval: false
+nobel_living <- nobel_living  |> 
+  mutate(
+    country_us = if_else(country == "USA", "USA", "Other")
+  )
+```
+
+Next, we will limit our analysis to only the following categories: Physics, Medicine, Chemistry, and Economics.
+
+```{r}
+#| label: ph-med-chem-eco
+#| eval: false
+nobel_living_science <- nobel_living |>
+  filter(category %in% c("Physics", "Medicine", "Chemistry", "Economics"))
+```
+
+
+> Don't forget to remove the chunk option `eval: false`. Otherwise, the code will not be evaluated.
+
+----------
+
+----------
+
+3. Create a faceted bar plot visualizing the relationship between the prize category and whether the laureate was in the US when they won the Nobel prize.
+    Interpret your visualization, and say a few words about whether the data support the BuzzFeed headline.
+
+    -   Your visualization should be faceted by category.
+    -   For each facet you should have two bars, one for winners in the US and one for Other.
+    -   Flip the coordinates so the bars are horizontal, not vertical.
+
+```{r} 
+#| label: barplot
+#| eval: false
+ggplot(nobel_living_science, aes(___ = country_us) ) +
+  ___() +
+  facet_wrap( ~ ___)
+```
+
+
+> Don't forget to remove the chunk option `eval: false`. Otherwise, the code will not be evaluated.
+
+
+4. But of those US-based Nobel laureates, many were born in other countries. Create a new variable called `born_country_us` with the value `"USA"` if the laureate is born in the US and `"Other"` otherwise. How many of the winners are born in the US?
+
+> Now you have to insert the code chunk yourself!
+
+
+5. Add a second variable to your visualization from Exercise 3 based on whether the laureate was born in the US or not.
+    Based on your visualization, does the data appear to support BuzzFeed's claim?
+    Explain your reasoning in 1-2 sentences.
+
+    -   Your final visualization should contain a facet for each category.
+    -   Within each facet, there should be a bar for whether the laureate won the award in the US or not.
+    -   Each bar should have segments for whether the laureate was born in the US or not.
+
+
+> Now you have to insert the code chunk yourself!
+
+
+6. In a single pipeline, filter for laureates who won their prize in the US but were born outside of the US, and then create a frequency table (with the `count()` function) for their birth country (`born_country`) and arrange the resulting data frame in descending order of number of observations for each country. Which country is the most common?
+
+> Now you have to insert the code chunk yourself!
+
+--------
+
+
+
+### Remark
+
+Did you recognize the visualizations in the BuzzFeed article?
+
+Yes, the plots are waffle plots, which we have discussed in the lecture.
+You can find the code used for making these plots in BuzzFeed's GitHub repo (yes, they have one!) [here](https://BuzzFeednews.github.io/2017-01-immigration-and-science/).
+You're not expected to recreate them as part of your assignment, but you're welcomed to do so for fun!
